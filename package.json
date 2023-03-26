@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "setup": "npx prisma migrate dev -n initial-setup && npx prisma db seed"
+    "setup": "npx prisma migrate dev && npx prisma db seed"
   },
   "dependencies": {
     "@prisma/client": "^4.11.0",

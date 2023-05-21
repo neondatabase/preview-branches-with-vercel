@@ -29,7 +29,7 @@ Since we're creating preview deployments using GitHub actions, it's a good idea 
 
 
 
-## set up project locally
+## set up project locallydasda
 
 If you want to use this project as a playground, you can you can set it up locally.
 

@@ -13,7 +13,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#1A1A1A]">
-      <ul className="grid grid-cols-2 md:grid-cols-6 gap-5">
+      <ul className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {elements.map((element) => (
           <li
             key={element.id}

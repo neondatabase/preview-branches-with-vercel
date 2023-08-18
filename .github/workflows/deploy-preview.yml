@@ -23,6 +23,7 @@ jobs:
           echo branch = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json)
 
       - name: get Neon branch ID
+        id: get-neon-branch-id
         run: |
           echo branch_id = $(neonctl branches get ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --api-key ${{ secrets.NEON_API_KEY }} --output json | jq -r '.id') >> $GITHUB_OUTPUT
 
@@ -57,4 +58,4 @@ jobs:
         with:
           message: |
             Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
-            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.create_branch.outputs.branch_id }}
+            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.get-neon-branch-id.outputs.branch_id }}

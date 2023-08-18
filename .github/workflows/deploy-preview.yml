@@ -10,28 +10,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get PR number
-        id: get_pull_request_sha
-        run: |
-          pull_request_sha=$(jq --raw-output .pull_request.base.sha "$GITHUB_EVENT_PATH" | cut -c1-8)
-          echo "pull_request_sha=${pull_request_sha}" >> $GITHUB_OUTPUT
-          echo $pull_request_sha
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v7
 
-      - name: Neon Database Create Branch Action
-        uses: neondatabase/create-branch-action@v3
-        id: create_branch
-        with:
-          project_id: ${{ secrets.NEON_PROJECT_ID }}
-          branch_name: ${{steps.get_pull_request_sha.outputs.pull_request_sha}}
-          api_key: ${{ secrets.NEON_API_KEY }}
-          username: ${{ secrets.PG_USERNAME }}
-          password: ${{ secrets.PG_PASSWORD }}
+      - name: Install the Neon CLI
+        run: npm install -g neonctl
+
+      - name: Create a Neon branch
+        id: create-branch
+        run: neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --branch-name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json
 
       - name: Run Prisma Migrate
         run: |
           touch .env
-          echo DATABASE_URL=${{ steps.create_branch.outputs.db_url_with_pooler}}/neondb >> .env
-          echo DIRECT_DATABASE_URL=${{ steps.create_branch.outputs.db_url}}/neondb >> .env
+          echo DATABASE_URL=$(npm run --silent neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+
+          echo DIRECT_DATABASE_URL=$(npm run --silent neonctl cs --pooler ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+
           npx prisma generate
           npx prisma migrate deploy
 

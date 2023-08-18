@@ -20,7 +20,7 @@ jobs:
       - name: Create a Neon branch
         id: create-branch
         run: |
-          echo branch = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json)
+          echo branch=$(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json)
 
       - name: get Neon branch ID
         id: get-neon-branch-id
@@ -30,7 +30,7 @@ jobs:
       - name: Run Prisma Migrate
         run: |
           touch .env
-
+          echo test=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }})
           echo DATABASE_URL=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
 
           echo DIRECT_DATABASE_URL=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env

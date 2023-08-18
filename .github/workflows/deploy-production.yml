@@ -17,21 +17,10 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v7
 
-      - name: Search branch by name
-        id: get_branch_id
-        # list all branches and filter by name
+      - name: get Neon branch ID
+        id: get-neon-branch-id
         run: |
-          branch_id=$(curl --silent \
-            "https://console.neon.tech/api/v2/projects/${{ secrets.NEON_PROJECT_ID }}/branches" \
-            --header "Accept: application/json" \
-            --header "Content-Type: application/json" \
-            --header "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" \
-            | jq -r .branches \
-            | jq -c '.[] | select(.name | contains("'${{ steps.branch-name.outputs.head_ref_branch }}'")) .id' \
-            | jq -r \
-            ) \
-            
-          echo "branch_id=${branch_id}" >> $GITHUB_OUTPUT
+          echo branch_id=$(neonctl branches get ${{ steps.branch-name.outputs.head_ref_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --api-key ${{ secrets.NEON_API_KEY }} --output json | jq -r '.id') >> $GITHUB_OUTPUT
 
       - name: Run Prisma Migrate
         run: |
@@ -56,5 +45,5 @@ jobs:
         uses: neondatabase/delete-branch-action@v2
         with:
           project_id: ${{ secrets.NEON_PROJECT_ID }}
-          branch_id: ${{ steps.get_branch_id.outputs.branch_id }}
+          branch_id: ${{ steps.get-neon-branch-id.outputs.branch_id }}
           api_key: ${{ secrets.NEON_API_KEY }}

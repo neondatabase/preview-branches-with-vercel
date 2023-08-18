@@ -20,17 +20,25 @@ jobs:
       - name: Create a Neon branch
         id: create-branch
         run: |
-          echo branch_id = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --branch-name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json | jq -r '.branch_id') >> $GITHUB_OUTPUT
+          echo branch = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json)
 
-      - name: Run Prisma Migrate
+      - name: get Neon branch ID
+        id: get-neon-branch-id
         run: |
-          touch .env
-          echo DATABASE_URL=$(npm run --silent neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+          echo branch_id=$(neonctl branches get ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --api-key ${{ secrets.NEON_API_KEY }} --output json | jq -r '.id') >> $GITHUB_OUTPUT
 
-          echo DIRECT_DATABASE_URL=$(npm run --silent neonctl cs --pooler ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+      # - name: Run Prisma Migrate
+      #   run: |
+      #     touch .env
 
-          npx prisma generate
-          npx prisma migrate deploy
+      #     echo DATABASE_URL = $(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> $GITHUB_OUTPUT
+
+      #     echo DATABASE_URL >> $GITHUB_OUTPUT
+
+      #     echo DIRECT_DATABASE_URL=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PGUSERNAME }} --database-name ${{ secrets.NEON_DATABSE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+
+      #     npx prisma generate
+      #     npx prisma migrate deploy
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
@@ -50,4 +58,4 @@ jobs:
         with:
           message: |
             Vercel Preview URL :rocket: : ${{ steps.deploy.outputs.preview_url }}
-            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.create_branch.outputs.branch_id }}
+            Neon branch :elephant: : https://console.neon.tech/app/projects/${{ secrets.NEON_PROJECT_ID }}/branches/${{ steps.get-neon-branch-id.outputs.branch_id }}

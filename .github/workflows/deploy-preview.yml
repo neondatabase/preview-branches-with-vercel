@@ -20,7 +20,9 @@ jobs:
       - name: Create a Neon branch
         id: create-branch
         run: |
-          echo branch_id = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json | jq -r '.branch_id') >> $GITHUB_OUTPUT
+          branch_id = $(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json | jq -r '.branch_id') 
+
+          echo branch_id >> $GITHUB_OUTPUT
 
       # - name: Run Prisma Migrate
       #   run: |

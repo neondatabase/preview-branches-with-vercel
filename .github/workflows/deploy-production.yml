@@ -13,10 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Get last commit SHA
-        id: get_sha
-        run: |
-          echo sha="${{ github.event.before }}" | cut -c1-8 >> $GITHUB_OUTPUT
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v7
 
       - name: Search branch by name
         id: get_branch_id
@@ -28,7 +27,7 @@ jobs:
             --header "Content-Type: application/json" \
             --header "Authorization: Bearer ${{ secrets.NEON_API_KEY }}" \
             | jq -r .branches \
-            | jq -c '.[] | select(.name | contains("'${{ steps.get_sha.outputs.sha }}'")) .id' \
+            | jq -c '.[] | select(.name | contains("'${{ steps.branch-name.outputs.head_ref_branch }}'")) .id' \
             | jq -r \
             ) \
             

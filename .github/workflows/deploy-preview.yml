@@ -23,7 +23,7 @@ jobs:
 
       - name: get Neon branch ID
         run: |
-          branch_id = $(neonctl branches get ${{ steps.branch-name.outputs.current_branch }} --output json | jq -r '.branch_id')
+          branch_id = $(neonctl branches get ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --output json | jq -r '.branch_id')
 
       # - name: Run Prisma Migrate
       #   run: |

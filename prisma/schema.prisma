@@ -3,15 +3,11 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_DATABASE_URL")
-  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model Element {
-  id           String @id @default(cuid())
-  elementName  String
-  atomicNumber Int    @unique
-  symbol       String
+model atomic_element {
+  atomic_number Int     @id
+  element_name  String?
 }

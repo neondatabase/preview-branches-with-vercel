@@ -10,7 +10,7 @@ There are two workflows in this project:
 - `deploy-production.yml`- this is triggered when you push commits to the main branch (so after merging a pull request). It applies any pending migrations and then deploys the app to production. It also deletes the Neon branch that was created for the preview deployment.
 
 
-## Prerequisites
+## Prerequisites 
 
 For the workflows to work, you need to add the following secrets to your GitHub repository:
 - `VERCEL_TOKEN`  

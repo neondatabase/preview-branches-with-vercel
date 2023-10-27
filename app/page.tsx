@@ -9,7 +9,6 @@ export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const elements = await getElements();
-  console.log(elements);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-[#1A1A1A]">
@@ -22,6 +21,7 @@ export default async function Home() {
             <p className="absolute top-2 left-2 text-sm">
               {element.atomic_number}
             </p>
+            <h2 className="text-2xl font-medium">{element.symbol}</h2>
             <p className="text-base">{element.element_name}</p>
           </li>
         ))}

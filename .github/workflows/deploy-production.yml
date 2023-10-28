@@ -30,9 +30,9 @@ jobs:
         run: |
           touch .env
 
-          echo DATABASE_URL=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PG_USERNAME }} --database-name ${{ secrets.PG_DATABASE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+          echo DATABASE_URL=$(neonctl cs ${{ secrets.NEON_MAIN_BRANCH_NAME }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PG_USERNAME }} --database-name ${{ secrets.PG_DATABASE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
 
-          echo DIRECT_DATABASE_URL=$(neonctl cs ${{ steps.branch-name.outputs.current_branch }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PG_USERNAME }} --database-name ${{ secrets.PG_DATABASE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
+          echo DIRECT_DATABASE_URL=$(neonctl cs ${{ secrets.NEON_MAIN_BRANCH_NAME }} --project-id ${{ secrets.NEON_PROJECT_ID }} --role-name ${{ secrets.PG_USERNAME }} --database-name ${{ secrets.PG_DATABASE }} --api-key ${{ secrets.NEON_API_KEY }}) >> .env
 
           npx prisma generate
           npx prisma migrate deploy

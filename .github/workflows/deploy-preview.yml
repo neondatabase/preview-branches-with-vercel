@@ -17,11 +17,14 @@ jobs:
       - name: Install the Neon CLI
         run: npm install -g neonctl
 
+        # If the branch already exists, this command will fail but without stopping the workflow.
+
       - name: Create a Neon branch
         id: create-branch
         run: |
           echo branch=$(neonctl branches create --project-id ${{ secrets.NEON_PROJECT_ID }} --name ${{ steps.branch-name.outputs.current_branch }} --api-key ${{ secrets.NEON_API_KEY }} --compute --type read_write -o json)
 
+      # The branch ID is needed to display the URL of the branch in the comment.
       - name: get Neon branch ID
         id: get-neon-branch-id
         run: |

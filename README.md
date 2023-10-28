@@ -56,7 +56,6 @@ cp .env.example .env
 ```bash
 DATABASE_URL = "" # the pooled connection to the database. It has a `-pooler` suffix
 DIRECT_DATABASE_URL = "" # the direct connection string to the database
-SHADOW_DATABASE_URL = "" # this is used during development
 ```
 
 4. Run the setup script which creates the tables and runs a seed script:

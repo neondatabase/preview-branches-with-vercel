@@ -16,6 +16,7 @@ For the workflows to work, you need to add the following secrets to your GitHub 
 - `VERCEL_TOKEN`  
 - `NEON_API_KEY` - this is the API key for the Neon user that will be used to create the branches. You can find it in the [account settings](https://console.neon.tech/app/settings/account).
 - `NEON_PROJECT_ID` - this is the ID of the Neon project. You can find it in the project settings on Neon.
+- `NEON_MAIN_BRANCH_NAME` - this is the name of your primary branch on Neon and what you use for production. By default, it's `main`
 - `PG_DATABSE` - this is the name of the database on Neon. By default, it's name is `neondb`
 - `PG_USERNAME` - username of the database role
 

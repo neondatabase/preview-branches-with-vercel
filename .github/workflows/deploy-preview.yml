@@ -17,7 +17,7 @@ jobs:
       - name: Install the Neon CLI
         run: npm install -g neonctl
 
-        # If the branch already exists, this command will fail so we get the branch ID in the next step
+        # If the branch already exists, this command will fail but the workflow will continue
 
       - name: Create a Neon branch
         id: create-branch

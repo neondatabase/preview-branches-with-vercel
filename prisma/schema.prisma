@@ -11,4 +11,5 @@ datasource db {
 model atomic_element {
   atomic_number Int     @id
   element_name  String?
+  symbol  String?
 }

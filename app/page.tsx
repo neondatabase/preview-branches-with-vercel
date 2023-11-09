@@ -21,6 +21,7 @@ export default async function Home() {
             <p className="absolute top-2 left-2 text-sm">
               {element.atomic_number}
             </p>
+            <h2 className="text-2xl font-medium">{element.symbol}</h2>
             <p className="text-base">{element.element_name}</p>
           </li>
         ))}

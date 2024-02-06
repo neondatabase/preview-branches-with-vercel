@@ -21,6 +21,9 @@ jobs:
         id: branch-name
         uses: tj-actions/branch-names@v8
 
+      - name: test
+        run: echo ${{ env.NEON_DATABASE_USERNAME }} ${{ env.NEON_API_KEY }} ${{ env.NEON_PROJECT_ID }} ${{ env.VERCEL_TOKEN }}
+
       - name: Create Neon Branch
         id: create-branch
         uses: neondatabase/create-branch-action@v4

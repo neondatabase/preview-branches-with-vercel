@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Element" ADD COLUMN     "atomicMass" DOUBLE PRECISION NOT NULL DEFAULT 0;

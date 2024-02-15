@@ -10,25 +10,25 @@
     "setup": "npx prisma migrate dev && npx prisma db seed"
   },
   "dependencies": {
-    "@prisma/client": "^5.5.2",
-    "next": "^14.0.0",
+    "@prisma/client": "^5.9.1",
+    "next": "^14.1.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.8.9",
-    "@types/react": "18.2.33",
-    "@types/react-dom": "18.2.14",
-    "autoprefixer": "^10.4.16",
-    "eslint": "8.52.0",
-    "eslint-config-next": "14.0.0",
-    "postcss": "^8.4.31",
-    "prisma": "^5.5.2",
-    "tailwindcss": "^3.3.5",
-    "ts-node": "10.9.1",
-    "typescript": "5.2.2"
+    "@types/node": "20.11.17",
+    "@types/react": "18.2.55",
+    "@types/react-dom": "18.2.19",
+    "autoprefixer": "^10.4.17",
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8.4.35",
+    "prisma": "^5.9.1",
+    "tailwindcss": "^3.4.1",
+    "tsx": "^4.7.1",
+    "typescript": "5.3.3"
   },
   "prisma": {
-    "seed": "ts-node --transpile-only --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts"
   }
 }

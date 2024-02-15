@@ -57,6 +57,7 @@ const elements = [
 ];
 
 async function main() {
+  await prisma.element.deleteMany();
   for (const element of elements) {
     await prisma.element.upsert({
       where: { atomicNumber: element.atomicNumber },

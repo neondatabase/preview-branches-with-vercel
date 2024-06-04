@@ -3,12 +3,12 @@ name: Deploy Preview
 on: [pull_request]
 
 env:
-  NEON_DATABASE_USERNAME: ${{ secrets.NEON_DATABASE_USERNAME }} # change this to your database username
+  NEON_DATABASE_USERNAME: ${{ secrets.PG_USERNAME }} # change this to your database username
+  NEON_DATABASE_NAME: ${{ secrets.PG_DATABASE }} # change this to your database name
   GH_TOKEN: ${{ secrets.GH_TOKEN }} # Required for commenting on pull requests for private repos
   NEON_API_KEY: ${{ secrets.NEON_API_KEY }} # You can generate a an API key in your account settings
   NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }} # You can find this in your project settings
   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-
 
 jobs:
   deploy-preview:
@@ -29,19 +29,18 @@ jobs:
           # parent: dev # optional (defaults to your primary branch)
           branch_name: preview/pr-${{ github.event.number }}-${{ steps.branch-name.outputs.current_branch }}
           username: ${{ env.NEON_DATABASE_USERNAME }}
+          database: ${{ env.NEON_DATABASE_NAME }}
           api_key: ${{ env.NEON_API_KEY }}
-
 
       - name: Run Migrations
         run: |
-            touch .env
-  
-            echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
-            echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
+          touch .env
 
-            npx prisma generate
-            npx prisma migrate deploy
+          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
+          echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
 
+          npx prisma generate
+          npx prisma migrate deploy
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest

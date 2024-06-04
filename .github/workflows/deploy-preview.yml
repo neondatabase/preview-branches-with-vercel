@@ -23,7 +23,7 @@ jobs:
 
       - name: Create Neon Branch
         id: create-branch
-        uses: neondatabase/create-branch-action@v4
+        uses: neondatabase/create-branch-action@v5
         with:
           project_id: ${{ env.NEON_PROJECT_ID }}
           # parent: dev # optional (defaults to your primary branch)
@@ -32,16 +32,18 @@ jobs:
           database: ${{ env.NEON_DATABASE_NAME }}
           api_key: ${{ env.NEON_API_KEY }}
 
+
       - name: Run Migrations
         run: |
           touch .env
 
-          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }}?sslmode=require >> .env
-          echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }}?sslmode=require >> .env
+          echo DATABASE_URL=${{ steps.create-branch.outputs.db_url_with_pooler }} >> .env
+          echo DIRECT_URL=${{ steps.create-branch.outputs.db_url }} >> .env
 
           npx prisma generate
           npx prisma migrate deploy
 
+          
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
 
